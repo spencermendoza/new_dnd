@@ -1,0 +1,6 @@
+<App>
+=><PlayerSortMenu /> menu that handles the sorting of all the player cards (further components inside)
+=><PlayerCardList /> the actual list of all player cards, holds/renders each player card component (further components inside)
+=><PlayerFormDialog /> handles the adding of new players
+=><TurnTimer /> handles the turn timer. will communicate with <PlayerCardList /> to set and reset active player
+</App>
