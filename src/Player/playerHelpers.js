@@ -54,9 +54,8 @@ export function getPlayerPropTypes() {
 }
 
 //updates a given player
-export const updatePlayer = (list, player) => {
+export const updatePlayer = (list, player) =>
     list.map(p => ((p.id === player.id) ? player : p));
-};
 
 //sorts an array according to item/prop input
 const _sort = prop => (a, b) => {

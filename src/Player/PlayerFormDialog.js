@@ -38,7 +38,6 @@ class PlayerFormDialog extends Component {
             id: parseInt(this.playerIdRef.current.value)
         });
         onConfirm(newPlayer);
-        console.log(newPlayer.id);
     }
 
     render() {

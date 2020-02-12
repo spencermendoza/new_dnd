@@ -13,15 +13,6 @@ const { Provider, Consumer } = PlayerContext;
 
 class PlayerProvider extends Component {
 
-    state = {
-        sortBy: 'initiative',
-        players: FAKE_PLAYERS,
-        dialog: {
-            open: false,
-            player: Player.create()
-        }
-    }
-
     handleTogglePlayerActive = player => {
         this.setState({
             players: togglePlayerActive(this.state.players, player)
@@ -30,7 +21,6 @@ class PlayerProvider extends Component {
 
     handleAddClick = () => {
         const player = Player.create();
-        player.id = generateId();
         this.setState({ dialog: { player: player, open: true } });
     }
 
@@ -43,14 +33,25 @@ class PlayerProvider extends Component {
     }
 
     handleDialogConfirmClick = player => {
-        const updatedPlayer = player.id
+        const updatedPlayers = (player.id)
             ? updatePlayer(this.state.players, player)
             : [...this.state.players, { ...player, id: generateId() }];
         this.setState({
-            players: updatedPlayer,
+            players: updatedPlayers,
             dialog: { player: Player.create(), open: false },
         });
     }
+
+
+    state = {
+        sortBy: 'initiative',
+        players: FAKE_PLAYERS.map(p => (Player.create(p))),
+        dialog: {
+            open: false,
+            player: Player.create()
+        }
+    }
+
 
     render() {
         return (
