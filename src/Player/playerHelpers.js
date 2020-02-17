@@ -3,15 +3,6 @@ import PropTypes from 'prop-types';
 //Fake player list for testing purposes
 export const FAKE_PLAYERS = [
     {
-        name: 'Cronan',
-        armor: 18,
-        hp: 158,
-        initiative: 18,
-        damage: 72,
-        id: 1,
-        active: false
-    },
-    {
         name: 'Balazar',
         armor: 20,
         hp: 127,
@@ -21,11 +12,20 @@ export const FAKE_PLAYERS = [
         active: false
     },
     {
+        name: 'Cronan',
+        armor: 18,
+        hp: 158,
+        initiative: 1,
+        damage: 52,
+        id: 1,
+        active: false
+    },
+    {
         name: 'Marsk',
         armor: 19,
         hp: 114,
         initiative: 7,
-        damage: 56,
+        damage: 75,
         id: 3,
         active: false
     },
@@ -33,7 +33,7 @@ export const FAKE_PLAYERS = [
         name: 'Barri',
         armor: 15,
         hp: 69,
-        initiative: 14,
+        initiative: 20,
         damage: 12,
         id: 4,
         active: false
@@ -66,11 +66,8 @@ const _sort = prop => (a, b) => {
 
 //sorts the list of players by their prop number
 export const sortPlayersBy = (list, prop) => {
-    if (list) {
-        return [...list.sort(_sort(prop))];
-    } else {
-        return console.log('there is no list');
-    }
+    return [...list.sort(_sort(prop))];
+    console.log('you chose to sort by' + prop);
 }
 
 //generates an id to use when creating a new player

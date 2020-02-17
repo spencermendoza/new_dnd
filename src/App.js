@@ -9,6 +9,7 @@ function App() {
     const { handleAddClick } = useContext(PlayerContext)
     return (
         <>
+            <PlayerSortMenu />
             <PlayerFormDialog />
             <PlayerCardList />
             <Button onClick={handleAddClick}>Add new Player</Button>

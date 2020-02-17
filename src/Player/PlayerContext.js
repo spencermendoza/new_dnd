@@ -42,10 +42,33 @@ class PlayerProvider extends Component {
         });
     }
 
+    handleUpdateSortOptions = item => {
+        const newSort = item;
+        this.setState({ sortBy: newSort });
+    }
+
 
     state = {
         sortBy: 'initiative',
-        players: FAKE_PLAYERS.map(p => (Player.create(p))),
+        players: FAKE_PLAYERS,
+        sortOptions: [
+            {
+                displayText: 'Initiative Value',
+                sortBy: 'initiative'
+            },
+            {
+                displayText: 'HP',
+                sortBy: 'hp'
+            },
+            {
+                displayText: 'Armor Class',
+                sortBy: 'armor'
+            },
+            {
+                displayText: 'Damage',
+                sortBy: 'damage'
+            }
+        ],
         dialog: {
             open: false,
             player: Player.create()
@@ -63,6 +86,7 @@ class PlayerProvider extends Component {
                     handleEditClick: this.handleEditClick,
                     handleDialogCancelClick: this.handleDialogCancelClick,
                     handleDialogConfirmClick: this.handleDialogConfirmClick,
+                    handleUpdateSortOptions: this.handleUpdateSortOptions
                 }}
             >{this.props.children}</Provider>
         )
