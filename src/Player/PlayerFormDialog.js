@@ -1,7 +1,6 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import { Player } from './player';
 import { PlayerContext } from './PlayerContext';
-import { generateId } from './playerHelpers';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -45,7 +44,6 @@ class PlayerFormDialog extends Component {
             dialog,
             handleDialogCancelClick,
             handleDialogConfirmClick,
-            generateId,
         } = this.context;
         const { player, open } = dialog;
         return (

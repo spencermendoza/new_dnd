@@ -3,7 +3,6 @@ import { Player } from './player';
 import {
     FAKE_PLAYERS,
     updatePlayer,
-    sortPlayersBy,
     generateId,
     togglePlayerActive
 } from './playerHelpers';

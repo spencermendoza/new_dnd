@@ -67,7 +67,6 @@ const _sort = prop => (a, b) => {
 //sorts the list of players by their prop number
 export const sortPlayersBy = (list, prop) => {
     return [...list.sort(_sort(prop))];
-    console.log('you chose to sort by' + prop);
 }
 
 //generates an id to use when creating a new player

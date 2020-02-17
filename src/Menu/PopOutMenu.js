@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 
 export const PopOutMenu = () => {
     const {
-        players,
         handleUpdateSortOptions,
         sortOptions
     } = useContext(PlayerContext)
@@ -29,7 +28,6 @@ export const PopOutMenu = () => {
     const handleClose = (thing) => {
         handleUpdateSortOptions(thing);
         setAnchorEl(null);
-        // console.log(thing);
     }
 
     const classes = useStyles();

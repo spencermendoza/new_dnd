@@ -15,6 +15,7 @@ export const PlayerCardList = () => {
             {sortPlayersBy(players, sortBy).map(player => (
                 <PlayerCard
                     player={player}
+                    key={player.id}
                 />
             ))}
         </Box>
