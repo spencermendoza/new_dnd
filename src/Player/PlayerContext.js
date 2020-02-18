@@ -4,7 +4,8 @@ import {
     FAKE_PLAYERS,
     updatePlayer,
     generateId,
-    togglePlayerActive
+    togglePlayerActive,
+    sortPlayersBy
 } from './playerHelpers';
 
 const PlayerContext = React.createContext();
@@ -46,10 +47,76 @@ class PlayerProvider extends Component {
         this.setState({ sortBy: newSort });
     }
 
+    nextHighestInit = () => {
+        var activeList = sortPlayersBy(this.state.players, 'initiative')
+        var nextActive = activeList[this.state.activeNumber]
+
+        for (var i = 0; i < activeList.length; i++) {
+            if (activeList[i].active == true) {
+                activeList = togglePlayerActive(activeList, activeList[i])
+                activeList = togglePlayerActive(activeList, activeList[i + 1])
+                break;
+            } else {
+                activeList = togglePlayerActive(activeList, activeList[0])
+            }
+        }
+        console.log(activeList)
+
+
+    }
+
+    timerStart = () => {
+        this.nextHighestInit()
+        this.myInterval = setInterval(() => {
+            const { seconds, minutes, bName } = this.state;
+            this.setState(({ bName }) => ({
+                bName: 'Stop Timer!'
+            }));
+            if (seconds > 0) {
+                this.setState(({ seconds }) => ({
+                    seconds: seconds - 1
+                }));
+            }
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    clearInterval(this.myInterval);
+                } else {
+                    this.setState(({ minutes }) => ({
+                        minutes: minutes - 1,
+                        seconds: 59
+                    }));
+                }
+            }
+        }, 1000);
+    }
+
+    timerStop = () => {
+        const { bName } = this.state;
+        const { players } = this.state;
+        this.setState(({ bName }) => ({
+            minutes: 2,
+            seconds: 0,
+            bName: 'Start Timer!'
+        }));
+        clearInterval(this.myInterval);
+    }
+
+    isTimerRunning = () => {
+        if (this.state.bName == 'Stop Timer!') {
+            this.timerStop();
+        } else {
+            this.timerStart();
+        }
+    }
+
 
     state = {
         sortBy: 'initiative',
         players: FAKE_PLAYERS,
+        minutes: 2,
+        seconds: 0,
+        bName: 'Start Timer!',
+        activeNumber: 0,
         sortOptions: [
             {
                 displayText: 'Initiative Value',
@@ -71,7 +138,7 @@ class PlayerProvider extends Component {
         dialog: {
             open: false,
             player: Player.create()
-        }
+        },
     }
 
 
@@ -85,7 +152,10 @@ class PlayerProvider extends Component {
                     handleEditClick: this.handleEditClick,
                     handleDialogCancelClick: this.handleDialogCancelClick,
                     handleDialogConfirmClick: this.handleDialogConfirmClick,
-                    handleUpdateSortOptions: this.handleUpdateSortOptions
+                    handleUpdateSortOptions: this.handleUpdateSortOptions,
+                    timerStart: this.timerStart,
+                    timerStop: this.timerStop,
+                    isTimerRunning: this.isTimerRunning,
                 }}
             >{this.props.children}</Provider>
         )

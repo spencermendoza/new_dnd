@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TimerContext } from './TimerContext';
+import { PlayerContext } from '../Player/PlayerContext';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +10,7 @@ export const TurnTimer = () => {
         minutes,
         seconds,
         bName
-    } = useContext(TimerContext);
+    } = useContext(PlayerContext);
 
     const useStyles = makeStyles({
         startStyles: {

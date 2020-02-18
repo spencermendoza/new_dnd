@@ -13,16 +13,20 @@ class TimerProvider extends Component {
         players: FAKE_PLAYERS,
         currentHighest: '',
         sortBy: sortPlayersBy,
-        playerIndex: 0,
-        togglePlayerActive: this.handleTogglePlayerActive
+        activeNumber: 0,
+        togglePlayerActive: this.handleTogglePlayerActive,
     };
 
     nextHighestInit = () => {
-        const { players } = this.state;
-        sortPlayersBy(players, 'initiative');
+        var activeList = sortPlayersBy(this.state.players, 'initiative')
+        var nextActive = activeList[this.state.activeNumber]
+        activeList = togglePlayerActive(activeList, nextActive)
+        nextActive = activeList[this.state.activeNumber]
+
     }
 
     timerStart = () => {
+        this.nextHighestInit()
         this.myInterval = setInterval(() => {
             const { seconds, minutes, bName } = this.state;
             this.setState(({ bName }) => ({
@@ -55,7 +59,6 @@ class TimerProvider extends Component {
             bName: 'Start Timer!'
         }));
         clearInterval(this.myInterval);
-        this.nextHighestInit();
     }
 
     isTimerRunning = () => {
