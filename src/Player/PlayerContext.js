@@ -5,6 +5,7 @@ import {
     updatePlayer,
     generateId,
     togglePlayerActive,
+    oldTogglePlayerActive,
     sortPlayersBy
 } from './playerHelpers';
 
@@ -15,7 +16,7 @@ class PlayerProvider extends Component {
 
     handleTogglePlayerActive = player => {
         this.setState({
-            players: togglePlayerActive(this.state.players, player)
+            players: oldTogglePlayerActive(this.state.players, player)
         });
     }
 
@@ -47,21 +48,40 @@ class PlayerProvider extends Component {
         this.setState({ sortBy: newSort });
     }
 
-    nextHighestInit = () => {
-        var activeList = sortPlayersBy(this.state.players, 'initiative')
-        var nextActive = activeList[this.state.activeNumber]
-
-        for (var i = 0; i < activeList.length; i++) {
-            if (activeList[i].active == true) {
-                activeList = togglePlayerActive(activeList, activeList[i])
-                activeList = togglePlayerActive(activeList, activeList[i + 1])
-                break;
+    handleSetNoneActive = (list) => {
+        return list.map(p => {
+            if (p.active-- - true) {
+                return togglePlayerActive(p);
             } else {
-                activeList = togglePlayerActive(activeList, activeList[0])
+                return p
             }
-        }
-        console.log(activeList)
+        })
+    }
 
+    nextHighestInit = () => {
+        const activeList = sortPlayersBy(this.state.players, 'initiative')
+        const workingNumber = this.state.activeNumber;
+        const prevNumber = workingNumber - 1;
+
+        if (this.state.activeNumber === 0 && activeList[activeList.length - 1].active === false) {
+            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
+            console.log('condition 1')
+        } else if (this.state.activeNumber === 0 && activeList[activeList.length - 1].active === true) {
+            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
+            this.handleDialogConfirmClick(togglePlayerActive(activeList[activeList.length - 1]))
+            console.log('condition 2')
+        } else {
+            this.handleDialogConfirmClick(togglePlayerActive(activeList[prevNumber]));
+            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
+            console.log('condition 3')
+        }
+
+
+        if (workingNumber > (activeList.length - 1)) {
+            this.setState({ activeNumber: 0 });
+        } else {
+            this.setState({ activeNumber: workingNumber + 1 });
+        }
 
     }
 

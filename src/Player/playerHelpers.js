@@ -72,8 +72,8 @@ export const sortPlayersBy = (list, prop) => {
 //generates an id to use when creating a new player
 export const generateId = () => Math.floor(Math.random() * 100_000);
 
-//toggles the player as an active player
-export function togglePlayerActive(list, player) {
+// toggles the player as an active player
+export function oldTogglePlayerActive(list, player) {
     return list.map(p => {
         if (p.id === player.id) {
             return { ...player, active: !player.active };
@@ -81,5 +81,10 @@ export function togglePlayerActive(list, player) {
             return p;
         }
     })
+    console.log(list)
 };
+
+export function togglePlayerActive(p) {
+    return { ...p, active: !p.active };
+}
 
