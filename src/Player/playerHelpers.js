@@ -88,3 +88,13 @@ export function togglePlayerActive(p) {
     return { ...p, active: !p.active };
 }
 
+export function addToList(list, item) {
+    return list.map(p => {
+        if (p.id === item.id) {
+            return item;
+        } else {
+            return p;
+        }
+    })
+}
+

@@ -6,7 +6,9 @@ import {
     generateId,
     togglePlayerActive,
     oldTogglePlayerActive,
-    sortPlayersBy
+    sortPlayersBy,
+    newUpdatePlayer,
+    addToList
 } from './playerHelpers';
 
 const PlayerContext = React.createContext();
@@ -33,6 +35,7 @@ class PlayerProvider extends Component {
         this.setState({ dialog: { player: Player.create(), open: false } });
     }
 
+    //TODO: rewrite this chunk of code to use the new functions in playerHelpers
     handleDialogConfirmClick = player => {
         const updatedPlayers = (player.id)
             ? updatePlayer(this.state.players, player)
@@ -50,7 +53,7 @@ class PlayerProvider extends Component {
 
     handleSetNoneActive = (list) => {
         return list.map(p => {
-            if (p.active-- - true) {
+            if (p.active === true) {
                 return togglePlayerActive(p);
             } else {
                 return p
@@ -59,30 +62,31 @@ class PlayerProvider extends Component {
     }
 
     nextHighestInit = () => {
-        const activeList = sortPlayersBy(this.state.players, 'initiative')
-        const workingNumber = this.state.activeNumber;
-        const prevNumber = workingNumber - 1;
 
-        if (this.state.activeNumber === 0 && activeList[activeList.length - 1].active === false) {
-            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
-            console.log('condition 1')
-        } else if (this.state.activeNumber === 0 && activeList[activeList.length - 1].active === true) {
-            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
-            this.handleDialogConfirmClick(togglePlayerActive(activeList[activeList.length - 1]))
-            console.log('condition 2')
+        let activeList = sortPlayersBy(this.state.players.map(p => {
+            if (p.active == false) {
+                return p;
+            } else {
+                return togglePlayerActive(p)
+            }
+        }), 'initiative')
+
+        let workingNumber = this.state.activeNumber;
+
+        if (workingNumber < activeList.length) {
+            activeList = oldTogglePlayerActive(activeList, activeList[workingNumber])
+            workingNumber++;
         } else {
-            this.handleDialogConfirmClick(togglePlayerActive(activeList[prevNumber]));
-            this.handleDialogConfirmClick(togglePlayerActive(activeList[workingNumber]))
-            console.log('condition 3')
+            workingNumber = 0;
+            activeList = oldTogglePlayerActive(activeList, activeList[workingNumber])
         }
 
+        activeList = sortPlayersBy(activeList, this.state.sortBy);
 
-        if (workingNumber > (activeList.length - 1)) {
-            this.setState({ activeNumber: 0 });
-        } else {
-            this.setState({ activeNumber: workingNumber + 1 });
-        }
-
+        this.setState({
+            players: activeList,
+            activeNumber: workingNumber
+        })
     }
 
     timerStart = () => {
@@ -111,13 +115,7 @@ class PlayerProvider extends Component {
     }
 
     timerStop = () => {
-        const { bName } = this.state;
-        const { players } = this.state;
-        this.setState(({ bName }) => ({
-            minutes: 2,
-            seconds: 0,
-            bName: 'Start Timer!'
-        }));
+        this.setState({ minutes: 2, seconds: 0, bName: 'Start Timer!' })
         clearInterval(this.myInterval);
     }
 
@@ -176,6 +174,7 @@ class PlayerProvider extends Component {
                     timerStart: this.timerStart,
                     timerStop: this.timerStop,
                     isTimerRunning: this.isTimerRunning,
+                    togglePlayerActive: togglePlayerActive
                 }}
             >{this.props.children}</Provider>
         )
