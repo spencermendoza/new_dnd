@@ -99,6 +99,7 @@ class PlayerProvider extends Component {
                 bName: 'Stop Timer!'
             });
 
+            //idk if there is a better way to do this so check back here later
             if (firstTurn) {
                 this.nextHighestInit();
                 this.setState({ firstTurn: false })
