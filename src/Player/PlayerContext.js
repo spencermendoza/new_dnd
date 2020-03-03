@@ -76,7 +76,10 @@ class PlayerProvider extends Component {
         if (workingNumber < activeList.length) {
             activeList = oldTogglePlayerActive(activeList, activeList[workingNumber])
             workingNumber++;
-        } else {
+        } else if (workingNumber === 0) {
+            activeList = oldTogglePlayerActive(activeList, activeList[workingNumber])
+        }
+        else {
             workingNumber = 0;
             activeList = oldTogglePlayerActive(activeList, activeList[workingNumber])
         }
@@ -90,12 +93,17 @@ class PlayerProvider extends Component {
     }
 
     timerStart = () => {
-        this.nextHighestInit()
         this.myInterval = setInterval(() => {
-            const { seconds, minutes, bName } = this.state;
-            this.setState(({ bName }) => ({
+            const { seconds, minutes, bName, firstTurn } = this.state;
+            this.setState({
                 bName: 'Stop Timer!'
-            }));
+            });
+
+            if (firstTurn) {
+                this.nextHighestInit();
+                this.setState({ firstTurn: false })
+            }
+
             if (seconds > 0) {
                 this.setState(({ seconds }) => ({
                     seconds: seconds - 1
@@ -103,7 +111,11 @@ class PlayerProvider extends Component {
             }
             if (seconds === 0) {
                 if (minutes === 0) {
-                    clearInterval(this.myInterval);
+                    this.setState({
+                        minutes: 0,
+                        seconds: 10
+                    })
+                    this.nextHighestInit()
                 } else {
                     this.setState(({ minutes }) => ({
                         minutes: minutes - 1,
@@ -115,7 +127,9 @@ class PlayerProvider extends Component {
     }
 
     timerStop = () => {
-        this.setState({ minutes: 2, seconds: 0, bName: 'Start Timer!' })
+        this.setState({
+            bName: 'Start Timer!'
+        })
         clearInterval(this.myInterval);
     }
 
@@ -131,9 +145,10 @@ class PlayerProvider extends Component {
     state = {
         sortBy: 'initiative',
         players: FAKE_PLAYERS,
-        minutes: 2,
-        seconds: 0,
+        minutes: 0,
+        seconds: 10,
         bName: 'Start Timer!',
+        firstTurn: true,
         activeNumber: 0,
         sortOptions: [
             {
